@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Form, Input } from 'reactstrap';
+import { Form, Input, Button } from 'reactstrap';
 import './CreateIdentityForm.css';
 
 class CreateIdentityForm extends Component {
@@ -36,8 +36,11 @@ class CreateIdentityForm extends Component {
     const ethAddress = this.props.ethAddress;
     return (
       <div className="container">
-        <Form className="form-container">
+        <Form className="form-container" onSubmit={this.handleSubmit}>
           <Input placeholder={ethAddress} />
+          <Button color="info" onSubmit={this.handleSubmit}>
+            Submit
+          </Button>
         </Form>
       </div>
     );
