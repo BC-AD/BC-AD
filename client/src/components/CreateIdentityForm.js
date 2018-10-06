@@ -33,10 +33,13 @@ class CreateIdentityForm extends Component {
   };
 
   render() {
+    const ethAddress = this.props.ethAddress;
     return (
-      <Form className="form-container">
-        <Input />
-      </Form>
+      <div className="container">
+        <Form className="form-container">
+          <Input placeholder={ethAddress} />
+        </Form>
+      </div>
     );
   }
 }
