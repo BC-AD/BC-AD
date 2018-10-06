@@ -15,7 +15,7 @@ contract Registry {
 		//the person's unique ID
 		uint    uid;
 		//the person's reputation, this is calculated on the frontend
-		uint    rep;
+		int    rep;
 		//will be in unix time
 		uint    timeCreated;
 	}
@@ -48,7 +48,6 @@ contract Registry {
 		return true;
 	}
 
-
 	//store all social media structs in case someone wants to find a person
 	//you can iterate through the whole array, burn a ton of gas and see everyone
 	digitalID[] public allIDs;
@@ -67,7 +66,7 @@ contract Registry {
 	   }
 	 */
 
-	function createNewUser(string url, uint urep, address user, uint created) external onlyOwner
+	function createNewUser(string url, address user) external onlyOwner
 	{
 		//mash all user data together and hash it, then cast to uint to
 		//get a user's unique ID.
@@ -75,10 +74,11 @@ contract Registry {
 		//only use constant values
 		//their reputation score can change over time which would make verification
 		//of a user impossible should their reputation change, altering their unique id
+    uint created = block.timestamp;
 		uint id = uint(keccak256(abi.encodePacked(url, created, user)));
 
 		//declare everything in the struct in one fell swoop.
-		allIDs.push(digitalID({owner: user, profile: url, uid: id, rep: urep, timeCreated: created}));
+		allIDs.push(digitalID({owner: user, profile: url, uid: id, rep: 1, timeCreated: created}));
 
 		//push the struct onto the struct array;
 		//allIDs.push(tmp);
@@ -90,7 +90,7 @@ contract Registry {
 		repExists[user] = true;
 	}
 
-	function getUserData(address user) public view returns (address, string, uint, uint, uint)
+	function getUserData(address user) public view returns (address, string, uint, uint, int)
 	{
 		//make sure that the user exists before you start
 		//accessing values that are out of bounds
@@ -114,8 +114,26 @@ contract Registry {
 	}
 
 	//get user's initial reputation 
-	function getUserReputation(address user) userExists(user) public view returns (uint)
+	function getUserReputation(address user) userExists(user) public view returns (int)
 	{
 		return (reputation[user].rep);
+	}
+
+	//set user's initial reputation 
+	function setUserReputation(address user, int _rep) userExists(user) public 
+	{
+		reputation[user].rep = _rep;
+	}
+
+	//downvoteUser reputation
+	function upvoteUserReputation(address user) userExists(user) public 
+	{
+		reputation[user].rep += 1;
+	}
+
+	//upvoteUser reputation
+	function downvoteUserReputation(address user) userExists(user) public 
+	{
+		reputation[user].rep -= 1;
 	}
 }

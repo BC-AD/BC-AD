@@ -2,10 +2,12 @@ pragma solidity ^0.4.24;
 pragma experimental ABIEncoderV2;
 
 import "./registrarNoProxy.sol";
+import "./reputation.sol";
 
 contract Asset {
 
-	Registry local;
+	Registry registry;
+  Reputation reputation;
 
   struct VerifierData {
     address verifiedBy;
@@ -16,9 +18,10 @@ contract Asset {
     address owner;
   }
 
-	constructor (address _registry) public 
+	constructor (address _registry, address _reputation) public 
 	{
-		local = Registry(_registry);
+		registry = Registry(_registry);
+		reputation = Reputation(_reputation);
 	}
 
 	//keep track of assets that we have already registered, start from 0
@@ -45,7 +48,7 @@ contract Asset {
 
 	modifier inRegistry(address _address)
 	{
-		require(local.exist(_address));
+		require(registry.exist(_address));
 		_;
 	}
 
@@ -78,7 +81,7 @@ contract Asset {
 	//function upVoteAsset(uint assetID) public 
 	//{
 	//	//make sure this guy is registered before he can vote on the asset
-	//	require (local.exist(msg.sender));
+	//	require (registry.exist(msg.sender));
 	//	//for loops are very inneficient as they burn lots of gas,
 	//	//but in my tired state I can't think up a mapping solution
 	//	for (uint i = 0; i < alreadyVoted[assetID].length; i++)
@@ -92,13 +95,13 @@ contract Asset {
 	//	alreadyVoted[assetID].push(msg.sender);
 	//	//get the reputation from the person who called the upvote function
 	//	//and add his reputation to the asset's reputation
-	//	assetReputation[allAssets[assetID]] += int(local.getUserReputation(msg.sender));
+	//	assetReputation[allAssets[assetID]] += int(registry.getUserReputation(msg.sender));
 	//}
 
 	//function downVoteAsset(uint assetID) public 
 	//{
 	//	//make sure this guy is registered before he can vote on the asset
-	//	require (local.exist(msg.sender));
+	//	require (registry.exist(msg.sender));
 	//	//for loops are very inneficient as they burn lots of gas,
 	//	//but in my tired state I can't think up a mapping solution
 	//	for (uint i = 0; i < alreadyVoted[assetID].length; i++)
@@ -113,7 +116,7 @@ contract Asset {
 	//	//get the reputation from the person who called the upvote function
 	//	//and subtract his reputation from the asset's reputation
 	//	//the bigger your reputation, the more weight your vote carries
-	//	assetReputation[allAssets[assetID]] -= int(local.getUserReputation(msg.sender));
+	//	assetReputation[allAssets[assetID]] -= int(registry.getUserReputation(msg.sender));
 	//}
 
 	function getAllAssets() public view returns (bytes32[])
@@ -123,7 +126,7 @@ contract Asset {
 	}
 
   // this moves an asset from one owner to another
-  function moveAsset(uint assetId, address to) public assetExists(assetId) onlyOwner inRegistry(to) {
+  function moveAsset(uint assetId, address to) public assetExists(assetId) onlyOwner(assetId) inRegistry(to) {
     allAssets[assetId].owner = to;
   }
 
@@ -132,14 +135,14 @@ contract Asset {
   // of a verifier
   function addVerifier(uint assetId, address verifier) public assetExists(assetId) inRegistry(verifier) {
     verifiers[assetId].push(VerifierData({verifiedBy: verifier, verifiedAt: block.timestamp}));
-    local.upvoteUser(verifiers[assetId][0].verifiedBy);
+    reputation.upvoteUser(verifiers[assetId][0].verifiedBy);
   }
 
   // has to loop but verifiers should be a short list
   function hasVerified(uint assetId, address verifier) assetExists(assetId) public view returns (bool) {
-    VerifierData[] storage verifiers = verifiers[assetId]
-    for (uint i = 0; i < verifiers.length; i++) {
-      if (verifiers[i].verifiedBy == verifier) {
+    VerifierData[] storage v = verifiers[assetId];
+    for (uint i = 0; i < v.length; i++) {
+      if (v[i].verifiedBy == verifier) {
         return true;
       }
     }
@@ -148,10 +151,10 @@ contract Asset {
   }
 
   // downvotes all verifiers for this asset
-  function refuteVerification(uint assetId) public assetExists(assetId) onlyOwner {
-    VerifierData[] storage verifiers = verifiers[assetId]
-    for (uint i = 0; i < verifiers.length; i++) {
-      local.downvoteUser(verifiers[i].verifiedBy);
+  function refuteVerification(uint assetId) public assetExists(assetId) onlyOwner(assetId) {
+    VerifierData[] storage v = verifiers[assetId];
+    for (uint i = 0; i < v.length; i++) {
+      reputation.downvoteUser(v[i].verifiedBy);
     }
   }
 }

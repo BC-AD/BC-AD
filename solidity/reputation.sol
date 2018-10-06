@@ -2,6 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./registrarNoProxy.sol";
 
+// XXX: TODO - make this a library 
 contract Reputation {
 
 	//create a local instance of contract so we understand how to call the contract
@@ -9,9 +10,6 @@ contract Reputation {
 
 	//keep track of the owner of this contract
 	address owner;
-
-	//keep track of people's reputation as voted on by others
-	mapping (address => int) userReputation;
 
 	//keep track of how many times someone has upvoted others
 	mapping (address => uint) alreadyUpVoted;
@@ -47,7 +45,7 @@ contract Reputation {
 		alreadyUpVoted[msg.sender] += 1;
 
 		//increase the users reputation by my own rep
-		userReputation[toVote] += 1;
+		users.upvoteUserReputation(toVote);
 	}
 
 	function downvoteUser(address toVote) public isRegistered(msg.sender) isRegistered(toVote)
@@ -59,13 +57,13 @@ contract Reputation {
 		alreadyDownVoted[msg.sender] += 1;
 
 		//decrease the users reputation
-		userReputation[toVote] -= 1;
+    users.downvoteUserReputation(toVote);
 	}
 
 	function getReputation(address user) isRegistered(user) public view returns (int)
 	{
 		//get reputation from the registry contract, then add that 
 		//to the users reputations in this contract
-		return userReputation[user] + int(users.getUserReputation(user));
+		int(users.getUserReputation(user));
 	}
 }
