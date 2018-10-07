@@ -19,7 +19,7 @@ const About = () => {
         <Button
           color="secondary"
           size="lg"
-          href="#">
+          href="https://github.com/BC-AD/BC-AD">
           View Code on Github</Button>
       </div>
     </div>
