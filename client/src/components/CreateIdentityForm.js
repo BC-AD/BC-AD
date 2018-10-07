@@ -5,7 +5,7 @@ import './CreateIdentityForm.css';
 
 class CreateIdentityForm extends Component {
   state = {
-    address: '',
+    address: this.props.ethAddress,
     name: ''
   };
 
@@ -34,18 +34,20 @@ class CreateIdentityForm extends Component {
   };
 
   signMessage = e => {
+    console.log(this.state.address);
     e.preventDefault();
     console.log('Signed Message');
     const web3 = this.props.web3;
     const certificate = {
-      name: e.target.name,
-      eth_address: e.target.eth_address
+      name: this.state.name,
+      eth_address: this.state.address
     };
     web3.personal.sign(
       web3.fromUtf8(JSON.stringify(certificate)),
       web3.eth.coinbase,
       console.log
     );
+    this.setState({ name: '' });
   };
 
   render() {
@@ -53,9 +55,29 @@ class CreateIdentityForm extends Component {
     return (
       <div className="container">
         <Form className="form-container" onSubmit={this.signMessage}>
-          <Input placeholder="Enter Your Full Name" />
-          <Input placeholder={ethAddress} />
-          <Button color="info" onClick={this.signMessage}>
+          <Input
+            placeholder="Enter Your Full Name"
+            type="text"
+            name="name"
+            value={this.state.name}
+            onChange={this.handleChange}
+          />
+          <Input
+            placeholder={ethAddress}
+            type="text"
+            name="address"
+            value={this.state.address}
+            onChange={this.handleChange}
+          />
+          <Button
+            className="btn-text"
+            color="info"
+            size="lg"
+            block
+            outline
+            color="info"
+            onClick={this.signMessage}
+          >
             Submit
           </Button>
         </Form>

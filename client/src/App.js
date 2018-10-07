@@ -25,6 +25,10 @@ class App extends Component {
     const ethAddress = this.state.ethAddress;
     return (
       <div className="App">
+        <div className="App-Header">
+          <h1 className="title">BC/AD</h1>
+          <p className="subtitle">Blockchain Artifact Database</p>
+        </div>
         {!web3 && <div>"Web3 was not detected :("</div>}
         {web3 &&
           ethAddress && (
