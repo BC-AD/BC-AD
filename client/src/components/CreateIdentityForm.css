@@ -12,3 +12,11 @@
   font-size: 1.4rem;
   font-weight: 600;
 }
+
+.twitter-share {
+  margin: 60px auto;
+  max-width: 500px;
+  background: white;
+  cursor: pointer;
+  overflow-wrap: break-word;
+}
