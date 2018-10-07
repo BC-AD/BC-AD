@@ -1,7 +1,13 @@
+#brand {
+  text-align: left;
+  left: 0;
+  float: left;
+}
+
 .nav-container {
-  margin: 10px 0;
+  padding: 10px 0;
   width: 100%;
-  background: #171e26;
+  background: black;
   text-align: right;
 }
 

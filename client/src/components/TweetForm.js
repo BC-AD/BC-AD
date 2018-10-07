@@ -2,67 +2,92 @@ import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { Form, Input, Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 
+const web3 = window.web3 && new window.Web3(window.web3.currentProvider);
+
+console.log(web3.eth);
+
 class TweetForm extends Component {
   state = {
-    url: ''
+    url: '',
+    signatureChecked: false,
+    isSignatureValid: false
   };
 
   handleSubmit = e => {
     e.preventDefault();
     const { url } = this.state;
     const endpoint = 'http://localhost:3001/verifyTweet';
+    axios.post(endpoint, {url})
+      .then(res => {
 
-    axios
-      .post(endpoint, {
-        url
+        const message = res.data;
+        web3.eth.accounts.recover(
+          message,
+          this.props.signature,
+          (err, addr) => {
+            if (addr == this.props.ethAddress) {
+              this.setState({
+                signatureChecked: true,
+                isSignatureValid: true
+              })
+            } else {
+              this.setState({
+                signatureChecked: true,
+                isSignatureValid: false
+              })
+            }
+          }
+        );
+
       })
-      .then(response => {
-        alert(response);
-      })
-      .catch(error => {
-        alert('There was an error verifying the signature');
+      .catch(err => {
+        console.error(err);
       });
-    this.setState({
-      url: ''
-    });
+
+    this.setState({url: ''});
   };
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  // verifySignature = (signature, address) => {
+  //   let r = signature.slice(0, 66);
+  //   let s = '0x' + signature.slice(66, 130);
+  //   let v = '0x' + signature.slice(130, 132);
+  //   v = web3.toDecimal(v);
+  //   msg = '0x' + msg
+  // }
+
   render() {
+    const signatureChecked = this.state.signatureChecked;
+    const isSignatureValid = this.state.isSignatureValid;
     return (
       <Fragment>
-        <Form className="form-container" onSubmit={this.handleSubmit}>
-          <Input
-            placeholder="Enter Your Tweet URL"
-            type="text"
-            name="url"
-            value={this.state.url}
-            onChange={this.handleChange}
-          />
-          <Button
-            className="btn-text"
-            color="info"
-            size="lg"
-            outline
-            color="info"
-            onClick={this.handleSubmit}
-          >
-            Submit
-          </Button>
-        </Form>
-        {/* <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalBody className="text-center font-weight-bold">
-            Please sign the message in MetaMask.
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" onClick={this.toggle}>
-              Close
+        {signatureChecked == false &&
+          <Form className="form-container" onSubmit={this.handleSubmit}>
+            <Input
+              placeholder="Enter Your Tweet URL"
+              type="text"
+              name="url"
+              value={this.state.url}
+              onChange={this.handleChange}
+            />
+            <Button
+              className="btn-text"
+              color="info"
+              size="lg"
+              outline
+              color="info"
+              onClick={this.handleSubmit}
+            >
+              Submit
             </Button>
-          </ModalFooter>
-        </Modal> */}
+          </Form>
+        }
+        {signatureChecked && isSignatureValid &&
+          <div>Success</div>
+        }
       </Fragment>
     );
   }

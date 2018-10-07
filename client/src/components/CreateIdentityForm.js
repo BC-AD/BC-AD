@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { TwitterShareButton, TwitterIcon } from 'react-share';
-
-import { Form, Input, Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import TweetForm from './TweetForm.js';
+import { Form, Input, Button, Label, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import './CreateIdentityForm.css';
+
+import bloomLogo from '../assets/bloom_logo.png';
 
 class CreateIdentityForm extends Component {
   state = {
     address: this.props.ethAddress,
+    certificate: null,
     name: '',
     signature: null,
     modal: false
@@ -31,18 +34,23 @@ class CreateIdentityForm extends Component {
       name: this.state.name,
       eth_address: this.state.address
     };
+    this.setState({
+      certificate
+    });
     web3.personal.sign(
       web3.fromUtf8(JSON.stringify(certificate)),
       web3.eth.coinbase,
       (err, signature) => {
-        this.setState({ signature }, () => {
-          console.log('state', this.state.signature);
-        });
+        this.setState({ signature });
       }
     );
     this.setState({ name: '' });
     this.toggle();
   };
+
+  navigateToBloom = () => {
+    window.location = '/bloom';
+  }
 
   render() {
     const ethAddress = this.props.ethAddress;
@@ -51,13 +59,15 @@ class CreateIdentityForm extends Component {
         {this.state.signature === null ? (
           <Fragment>
             <Form className="form-container" onSubmit={this.signMessage}>
+              <Label className="form-label" for="name">First and Last Name</Label>
               <Input
-                placeholder="Enter Your Full Name"
+                placeholder="Satoshi Nakamoto"
                 type="text"
                 name="name"
                 value={this.state.name}
                 onChange={this.handleChange}
               />
+              <Label className="form-label" for="name">Ethereum Address</Label>
               <Input
                 placeholder={ethAddress}
                 type="text"
@@ -77,6 +87,10 @@ class CreateIdentityForm extends Component {
                 Submit
               </Button>
             </Form>
+            <div className="loginButtons" onClick={this.navigateToBloom}>
+              <div style={{color: 'white'}}>Register with Bloom</div>
+              <img className="bloomLogo" src={bloomLogo} />
+            </div>
             <Modal isOpen={this.state.modal} toggle={this.toggle}>
               <ModalBody className="text-center font-weight-bold">
                 Please sign the message in MetaMask.
@@ -112,6 +126,10 @@ class CreateIdentityForm extends Component {
             >
               I Tweeted
             </Button>
+            <TweetForm
+              ethAddress={this.state.ethAddress}
+              signature={this.state.signature}
+              />
           </Fragment>
         )}
       </div>

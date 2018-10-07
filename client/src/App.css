@@ -1,19 +1,33 @@
 @import url('https://fonts.googleapis.com/css?family=Enriqueta:700');
 
 .App {
+  background-image: url('./assets/willian-justen-de-vasconcellos-667258-unsplash.jpg');
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+  height: 100vh;
   text-align: center;
 }
 
 .App-Header {
   margin-top: 40px;
-  color: #e24d97;
-  font-family: 'Enriqueta', serif;
+}
+
+.App-underlay {
+  background-color: rgba(0,0,0,.8);
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  z-index: -9;
 }
 
 .title {
+  color: #e24d97;
   font-size: 5rem;
+  font-family: 'Enriqueta', serif;
 }
 
 .subtitle {
-  font-size: 2rem;
+  color: white;
+  font-size: 1rem;
 }

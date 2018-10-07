@@ -8,11 +8,21 @@ const Nav = () => {
       <NavLink
         exact
         to="/"
+        id="brand"
+        className="navlink"
+        style={{ textDecoration: 'none' }}
+        activeStyle={{ textDecoration: 'none', color: 'none' }}
+      >
+        BC/AD
+      </NavLink>
+      <NavLink
+        exact
+        to="/register"
         className="navlink"
         style={{ textDecoration: 'none' }}
         activeStyle={{ textDecoration: 'none', color: 'white' }}
       >
-        Home
+        Register
       </NavLink>
       <NavLink
         exact
@@ -24,7 +34,7 @@ const Nav = () => {
         Assets
       </NavLink>
       <NavLink
-        to="/auth"
+        to="/authenticators"
         className="navlink"
         style={{ textDecoration: 'none' }}
         activeStyle={{ textDecoration: 'none', color: 'white' }}
