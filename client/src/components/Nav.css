@@ -1,0 +1,17 @@
+.nav-container {
+  margin: 10px 0;
+  width: 100%;
+  background: #171e26;
+  text-align: right;
+}
+
+.navlink {
+  font-weight: 600;
+  color: #42a3b8;
+  padding: 0 25px;
+  font-size: 1.2rem;
+}
+
+.navlink:hover {
+  color: white;
+}
