@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Form, Input, Button } from 'reactstrap';
+import { Form, Input, Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import './CreateIdentityForm.css';
 
 class CreateIdentityForm extends Component {
   state = {
     address: this.props.ethAddress,
-    name: ''
+    name: '',
+    signature: null,
+    modal: false
   };
+
+  toggle = this.toggle.bind(this);
 
   // handleSubmit = e => {
   //   e.preventDefault();
@@ -29,6 +33,12 @@ class CreateIdentityForm extends Component {
   //   });
   // };
 
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
+  }
+
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -42,12 +52,24 @@ class CreateIdentityForm extends Component {
       name: this.state.name,
       eth_address: this.state.address
     };
-    web3.personal.sign(
-      web3.fromUtf8(JSON.stringify(certificate)),
-      web3.eth.coinbase,
-      console.log
-    );
+    web3.personal
+      .sign(
+        web3.fromUtf8(JSON.stringify(certificate)),
+        web3.eth.coinbase,
+        console.log
+        // null,
+        // console.log
+        // res => {
+        //   this.setState({ signature: res });
+        //   console.log(this.state.signature);
+        // }
+      )
+      .then(res => {
+        this.setState({ signature: res });
+        console.log(this.state.signature);
+      });
     this.setState({ name: '' });
+    this.toggle();
   };
 
   render() {
@@ -81,6 +103,16 @@ class CreateIdentityForm extends Component {
             Submit
           </Button>
         </Form>
+        <Modal isOpen={this.state.modal} toggle={this.toggle}>
+          <ModalBody className="text-center font-weight-bold">
+            Please sign the message in MetaMask.
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" onClick={this.toggle}>
+              Close
+            </Button>
+          </ModalFooter>
+        </Modal>
       </div>
     );
   }
