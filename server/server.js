@@ -6,7 +6,7 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       cors = require('cors'),
       helmet = require('helmet'),
-      Web3 = require('web3'),
+      ethers = require('ethers'),
       axios = require('axios');
 
 /* APP */
@@ -17,11 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-/* WEB3 */
-const web3 = new Web3(Web3.currentProvider);
-
 /* TWITTER */
-// url encode consumer key and secret
 const twitterKey = encodeURI(process.env.TWITTER_KEY);
 const twitterSecret = encodeURI(process.env.TWITTER_SECRET);
 const token = twitterKey + ":" + twitterSecret;
@@ -64,15 +60,8 @@ app.post('/verifyTweet', (req, res) => {
     .then(twitterBearerToken => {
       getTweet(base+statusId, twitterBearerToken)
         .then(signature => {
-          console.log(signature);
-          // const signature = tweet.data; // find out what twitter sends back
-          if (web3.eth.personal.ecRecover(message, signature) == sender)  {
-            res.status(200).send("Signature verified");
-          } else {
-            res.status(401).send("Invalid signature");
-          }
+          res.send(signature);
         });
-      console.log(twitterBearerToken);
     });
 });
 
