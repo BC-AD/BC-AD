@@ -9,21 +9,21 @@ class TweetForm extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    const { address } = this.state;
-    const endpoint = 'some endpoint'; // TODO: create server side endpoint
+    const { url } = this.state;
+    const endpoint = 'http://localhost:3001/verifyTweet';
 
     axios
       .post(endpoint, {
-        address: address
+        url
       })
       .then(response => {
         alert(response);
       })
       .catch(error => {
-        alert('There was an error verifying your identity');
+        alert('There was an error verifying the signature');
       });
     this.setState({
-      address: ''
+      url: ''
     });
   };
 
