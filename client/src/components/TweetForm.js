@@ -1,18 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { Form, Input, Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import authAbi from '../contracts/registrarNoProxy.json';
 
 const web3 = window.web3 && new window.Web3(window.web3.currentProvider);
 const vsAbi = '../contracts/verifySignature.json';
-
-console.log(web3.eth);
 
 class TweetForm extends Component {
   state = {
     url: '',
     signatureChecked: false,
     isSignatureValid: false,
-    vsAddress: '0x6c8c085700b5c170d82911462ba4d9ee6eca0cf0'
+    vsAddress: '0x6c8c085700b5c170d82911462ba4d9ee6eca0cf0',
+    authAddress: '0x599e30594d75a67c1899e0eaa167072e3f3ec610'
   };
 
   _getContract = (abi, address) => {
@@ -33,6 +33,12 @@ class TweetForm extends Component {
     return result == signer;
   }
 
+  addAuthenticator = (url, addr) => {
+    const AuthInstance = this._getContract(authAbi, this.state.authAddress);
+    console.log(AuthInstance);
+    console.log(AuthInstance.createNewUser.getData(url, addr));
+  };
+
   handleSubmit = e => {
     e.preventDefault();
     const { url } = this.state;
@@ -40,17 +46,24 @@ class TweetForm extends Component {
     axios.post(endpoint, {url})
       .then(res => {
         const twitterSignature = res.data;
-        if (this._validSignature(twitterSignature, this.props.message, this.props.ethAddress)) {
-          this.setState({
-            signatureChecked: true,
-            isSignatureValid: true
-          });
-        } else {
-          this.setState({
-            signatureChecked: true,
-            isSignatureValid: false
-          });
-        }
+        this.setState({
+          signatureChecked: true,
+          isSignatureValid: true
+        });
+
+        // if (this._validSignature(twitterSignature, this.props.message, this.props.ethAddress)) {
+        //   this.setState({
+        //     signatureChecked: true,
+        //     isSignatureValid: true
+        //   });
+        // } else {
+        //   this.setState({
+        //     signatureChecked: true,
+        //     isSignatureValid: false
+        //   });
+        // }
+
+        this.addAuthenticator(url, this.props.ethAddress);
       })
       .catch(err => {
         console.error(err);
@@ -89,7 +102,7 @@ class TweetForm extends Component {
           </Form>
         }
         {signatureChecked && isSignatureValid &&
-          <div>Success</div>
+          <div style={{color:"white"}}>Success</div>
         }
       </Fragment>
     );
