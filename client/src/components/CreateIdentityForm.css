@@ -1,14 +1,41 @@
 .form-container {
   margin: 50px auto;
-  max-width: 425px;
-  height: 200px;
+  max-width: 450px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-label {
+  text-align: left;
+  margin-top: 10px;
 }
 
 .btn-text {
   font-size: 1.4rem;
   font-weight: 600;
+}
+
+.twitter-share {
+  margin: 60px auto;
+  max-width: 500px;
+  background: white;
+  cursor: pointer;
+  overflow-wrap: break-word;
+}
+
+.loginButtons {
+  margin: 0 auto;
+  max-width: 450px;
+}
+
+.bloomLogo {
+  width: 100px;
+  border: 1px white solid;
+  padding: 4px;
+  border-radius: 30px;
 }

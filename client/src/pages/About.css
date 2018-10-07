@@ -1,0 +1,25 @@
+.About {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  z-index: 9999;
+  background-image: url('../assets/willian-justen-de-vasconcellos-667258-unsplash.jpg');
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover;
+  height: 100vh;
+}
+
+.About-header {
+  padding-top: 10%;
+  font-family: 'Enriqueta', serif;
+  color: white;
+}
+
+.title {
+  font-size: 5rem;
+}
+
+.subtitle {
+  font-size: 2rem;
+}

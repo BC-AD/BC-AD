@@ -1,0 +1,23 @@
+#brand {
+  text-align: left;
+  left: 0;
+  float: left;
+}
+
+.nav-container {
+  padding: 10px 0;
+  width: 100%;
+  background: black;
+  text-align: right;
+}
+
+.navlink {
+  font-weight: 600;
+  color: #42a3b8;
+  padding: 0 25px;
+  font-size: 1.2rem;
+}
+
+.navlink:hover {
+  color: white;
+}
