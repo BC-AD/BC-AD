@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import axios from 'axios';
 import { TwitterShareButton, TwitterIcon } from 'react-share';
+
 import { Form, Input, Button, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import './CreateIdentityForm.css';
 
@@ -13,26 +13,6 @@ class CreateIdentityForm extends Component {
   };
 
   toggle = this.toggle.bind(this);
-
-  // handleSubmit = e => {
-  //   e.preventDefault();
-  //   const { address } = this.state;
-  //   const endpoint = 'some endpoint'; // TODO: create server side endpoint
-
-  //   axios
-  //     .post(endpoint, {
-  //       address: address
-  //     })
-  //     .then(response => {
-  //       alert(response);
-  //     })
-  //     .catch(error => {
-  //       alert('There was an error verifying your identity');
-  //     });
-  //   this.setState({
-  //     address: ''
-  //   });
-  // };
 
   toggle() {
     this.setState({
@@ -109,16 +89,30 @@ class CreateIdentityForm extends Component {
             </Modal>
           </Fragment>
         ) : (
-          <div className="twitter-share">
-            <h5>Success! Click here to share your signature in a new tweet.</h5>
-            <TwitterShareButton
-              url="http://twitter.com"
-              title={this.state.signature}
+          <Fragment>
+            <div className="twitter-share">
+              <h5>
+                Success! Click here to share your signature in a new tweet.
+              </h5>
+              <TwitterShareButton
+                url="http://twitter.com"
+                title={this.state.signature}
+              >
+                {this.state.signature}
+                <TwitterIcon size={32} round />
+              </TwitterShareButton>
+            </div>
+            <Button
+              className="btn-text"
+              color="info"
+              size="lg"
+              outline
+              color="info"
+              href="/tweeturl"
             >
-              {this.state.signature}
-              <TwitterIcon size={32} round />
-            </TwitterShareButton>
-          </div>
+              I Tweeted
+            </Button>
+          </Fragment>
         )}
       </div>
     );
