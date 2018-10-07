@@ -14,8 +14,7 @@ contract Registry {
 
 		//the person's unique ID
 		uint    uid;
-		//the person's reputation, this is calculated on the frontend
-		uint    rep;
+	
 		//will be in unix time
 		uint    timeCreated;
 	}
@@ -24,7 +23,7 @@ contract Registry {
 	//address public delegate;
 
 	//map social media url to a reputation
-	mapping (address => digitalID) public reputation;
+	mapping (address => digitalID) public registration;
 
 	//keep a mapping of all addresses that exist
 	mapping (address => bool) public repExists;
@@ -48,7 +47,6 @@ contract Registry {
 		return true;
 	}
 
-
 	//store all social media structs in case someone wants to find a person
 	//you can iterate through the whole array, burn a ton of gas and see everyone
 	digitalID[] public allIDs;
@@ -67,7 +65,7 @@ contract Registry {
 	   }
 	 */
 
-	function createNewUser(string url, uint urep, address user, uint created) external onlyOwner
+	function createNewUser(string url, address user) external onlyOwner
 	{
 		//mash all user data together and hash it, then cast to uint to
 		//get a user's unique ID.
@@ -75,31 +73,28 @@ contract Registry {
 		//only use constant values
 		//their reputation score can change over time which would make verification
 		//of a user impossible should their reputation change, altering their unique id
+        uint created = block.timestamp;
 		uint id = uint(keccak256(abi.encodePacked(url, created, user)));
 
 		//declare everything in the struct in one fell swoop.
-		allIDs.push(digitalID({owner: user, profile: url, uid: id, rep: urep, timeCreated: created}));
-
-		//push the struct onto the struct array;
-		//allIDs.push(tmp);
+		allIDs.push(digitalID({owner: user, profile: url, uid: id, timeCreated: created}));
 
 		//set the reputation variable to the new struct pushed onto the struct array
-		reputation[user] = allIDs[allIDs.length - 1];
+		registration[user] = allIDs[allIDs.length - 1];
 
 		//remember that this person now has a reputation
 		repExists[user] = true;
 	}
 
-	function getUserData(address user) public view returns (address, string, uint, uint, uint)
+	function getUserData(address user) public view returns (address, string, uint, uint)
 	{
 		//make sure that the user exists before you start
 		//accessing values that are out of bounds
 		require(repExists[user]);
 
 		//return all user data from specified struct
-		return (reputation[user].owner, reputation[user].profile,
-				reputation[user].uid, reputation[user].timeCreated,
-				reputation[user].rep);
+		return (registration[user].owner, registration[user].profile,
+				registration[user].uid, registration[user].timeCreated);
 	}
 
 	function owner() public view returns (address)
@@ -111,11 +106,5 @@ contract Registry {
 	{
 		require (exists(user));
 		_;
-	}
-
-	//get user's initial reputation 
-	function getUserReputation(address user) userExists(user) public view returns (uint)
-	{
-		return (reputation[user].rep);
 	}
 }
