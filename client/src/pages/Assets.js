@@ -17,17 +17,22 @@ class Assets extends Component {
   getAssets = () => {
     const AssetInstance = this._getContract(assetAbi, this.state.assetAddress);
     AssetInstance.getAllAssets.call((err, data) => {
-      console.log(data);
-      this.setState({
-        assets: data
+      let temp = [];
+      const result = data.map((d) => {
+        let uid = data.indexOf(d);
+        AssetInstance.getVerifiersForAsset.call(uid, (err, data) => {
+          console.log(data);
+        });
+        return <div key={d}>{d}</div>
       });
+      this.setState({assets: result});
     });
   };
 
   render() {
     const assets = this.state.assets;
     if (assets == null) { this.getAssets(); }
-    return <div style={{color:"white"}}>{this.state.assets}</div>;
+    return <div style={{color:"white"}}>{assets}</div>;
   }
 }
 
