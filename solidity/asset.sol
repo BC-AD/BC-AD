@@ -113,4 +113,8 @@ contract Asset {
         address(reputation).delegatecall(bytes4(keccak256("downvoteUser(address)")), v[i].verifiedBy);
     }
   }
+  
+  function getVerifiersForAsset(uint assetId) public view assetExists(assetId) returns (VerifierData[])  {
+      return verifiers[assetId];
+  }
 }
