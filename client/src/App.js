@@ -34,7 +34,7 @@ class App extends Component {
           ethAddress && (
             <CreateIdentityForm web3={web3} ethAddress={ethAddress} />
           )}
-        {web3 && !ethAddress && <div>Loading...</div>}
+        {web3 && !ethAddress && <div style={{color:"white"}}>Loading...</div>}
       </div>
     );
   }
