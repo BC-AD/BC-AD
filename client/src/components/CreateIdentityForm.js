@@ -44,9 +44,7 @@ class CreateIdentityForm extends Component {
   };
 
   signMessage = e => {
-    console.log(this.state.address);
     e.preventDefault();
-    console.log('Signed Message');
     const web3 = this.props.web3;
     const certificate = {
       name: this.state.name,
@@ -56,18 +54,12 @@ class CreateIdentityForm extends Component {
       .sign(
         web3.fromUtf8(JSON.stringify(certificate)),
         web3.eth.coinbase,
-        console.log
-        // null,
-        // console.log
-        // res => {
-        //   this.setState({ signature: res });
-        //   console.log(this.state.signature);
-        // }
-      )
-      .then(res => {
-        this.setState({ signature: res });
-        console.log(this.state.signature);
-      });
+        (err, signature) => {
+          this.setState({signature}, () => {
+            console.log("state", this.state.signature);
+          });
+        }
+      );
     this.setState({ name: '' });
     this.toggle();
   };
