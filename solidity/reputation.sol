@@ -38,13 +38,13 @@ contract Reputation {
   function upvoteUser(address toVote) public isRegistered(msg.sender) isRegistered(toVote)
   {
     //you can only upvote other users 2 times in your whole lifetime, use these wisely
-    require(alreadyUpVoted[msg.sender] < 5);
+    //require(alreadyUpVoted[msg.sender] < 5);
 
     //you can't upvote yourself
     require(msg.sender != toVote);
 
     //add 1 to the amount of times they have up voted
-    alreadyUpVoted[msg.sender] += 1;
+    //alreadyUpVoted[msg.sender] += 1;
 
     //increase the users reputation by my own rep
     reputations[toVote] += 1;
@@ -53,10 +53,10 @@ contract Reputation {
   function downvoteUser(address toVote) public isRegistered(msg.sender) isRegistered(toVote)
   {
     //you can only downvote other users 5 times in your whole lifetime, use these wisely
-    require(alreadyDownVoted[msg.sender] < 5);
+    //require(alreadyDownVoted[msg.sender] < 5);
 
     //add 1 to the amount of times they have down voted
-    alreadyDownVoted[msg.sender] += 1;
+    //alreadyDownVoted[msg.sender] += 1;
 
     //decrease the users reputation
     reputations[toVote] -= 1;
