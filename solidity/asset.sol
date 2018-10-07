@@ -91,7 +91,12 @@ contract Asset {
   // of a verifier
   function addVerifier(uint assetId, address verifier) public assetExists(assetId) onlyOwner(assetId) inRegistry(verifier) {
     verifiers[assetId].push(VerifierData({verifiedBy: verifier, verifiedAt: block.timestamp}));
-    address(reputation).delegatecall(bytes4(keccak256("upvoteUser(address)")), verifier);
+
+    // upvote all verifiers on this artifact...re-verification helps everyone
+    VerifierData[] storage v = verifiers[assetId];
+    for (uint i = 0; i < v.length; i++) {
+        address(reputation).delegatecall(bytes4(keccak256("upvoteUser(address)")), v[i].verifiedBy);
+    }
   }
 
   // has to loop but verifiers should be a short list
