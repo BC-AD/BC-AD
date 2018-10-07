@@ -6,7 +6,6 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       cors = require('cors'),
       helmet = require('helmet'),
-      ethers = require('ethers'),
       axios = require('axios');
 
 /* APP */
@@ -64,6 +63,24 @@ app.post('/verifyTweet', (req, res) => {
         });
     });
 });
+
+async function getAbi(url) {
+  const abi = await axios.get(url);
+  return abi;
+}
+
+// https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=0xBB9bc244D798123fDe783fCc1C72d3Bb8C189413&apikey=YourApiKeyToken
+
+// app.get('/abi', (req, res) => {
+//   const address = req.params.address;
+//   const key = process.env.ETHERSCAN_KEY;
+//   const url = `https://api-kovan.etherscan.io/api?module=contract&action=getabi&address=${address}`;
+//   getAbi(url)
+//     .then(data => {
+//       console.log(data.data.result);
+//       //res.send(JSON.parse(data.result));
+//     });
+// });
 
 const server = app.listen(port, (err) => {
   if (err) {

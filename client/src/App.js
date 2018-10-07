@@ -9,7 +9,7 @@ class App extends Component {
   state = {
     ethAddress: null
   };
-
+  
   _getEthAddress = () => {
     setTimeout(() => {
       const ethAddress = web3 && web3.eth.accounts[0];
