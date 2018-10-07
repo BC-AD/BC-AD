@@ -13,8 +13,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <div className="App-underlay"></div>
-        <Route path="/" component={Nav} />
+        <Nav />
         <Route exact path="/" component={About} />
         <Route exact path="/bloom" component={Bloom} />
         <Route exact path="/register" component={Register} />

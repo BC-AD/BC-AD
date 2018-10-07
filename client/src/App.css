@@ -1,11 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Enriqueta:700');
 
 .App {
-  background-image: url('./assets/willian-justen-de-vasconcellos-667258-unsplash.jpg');
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-size: cover;
-  height: 100vh;
   text-align: center;
 }
 

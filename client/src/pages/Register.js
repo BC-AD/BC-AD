@@ -3,6 +3,7 @@ import CreateIdentityForm from '../components/CreateIdentityForm';
 import {RequestQRCode, RequestData} from '@bloomprotocol/share-kit'
 
 import '../App.css';
+import './Register.css';
 
 const web3 = window.web3 && new window.Web3(window.web3.currentProvider);
 
@@ -28,7 +29,7 @@ class Home extends Component {
 
     console.log(web3);
     return (
-      <Fragment>
+      <Fragment className="Register">
         <div className="App-Header">
           <p className="subtitle">Register to be an asset authenticator</p>
         </div>

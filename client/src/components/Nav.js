@@ -5,16 +5,9 @@ import './Nav.css';
 const Nav = () => {
   return (
     <div className="nav-container">
-      <NavLink
-        exact
-        to="/"
-        id="brand"
-        className="navlink"
-        style={{ textDecoration: 'none' }}
-        activeStyle={{ textDecoration: 'none', color: 'none' }}
-      >
-        BC/AD
-      </NavLink>
+      <div
+        id='brand'
+        className='navlink'>BC/AD</div>
       <NavLink
         exact
         to="/register"
