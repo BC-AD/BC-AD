@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import CreateIdentityForm from './components/CreateIdentityForm';
+import Assets from './pages/Assets';
 
 const web3 = window.web3 && new window.Web3(window.web3.currentProvider);
-
-// TODO: poll for the web3 address and then timeout
 
 class App extends Component {
   state = {
@@ -21,8 +20,8 @@ class App extends Component {
   };
 
   render() {
-    this._getEthAddress();
     const ethAddress = this.state.ethAddress;
+    if (!ethAddress) { this._getEthAddress(); }
     return (
       <div className="App">
         <div className="App-Header">
@@ -32,7 +31,10 @@ class App extends Component {
         {!web3 && <div>"Web3 was not detected :("</div>}
         {web3 &&
           ethAddress && (
-            <CreateIdentityForm web3={web3} ethAddress={ethAddress} />
+            <div>
+              <CreateIdentityForm web3={web3} ethAddress={ethAddress} />
+              <Assets web3={web3} />
+            </div>
           )}
         {web3 && !ethAddress && <div style={{color:"white"}}>Loading...</div>}
       </div>
