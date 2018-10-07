@@ -9,10 +9,11 @@ import bloomLogo from '../assets/bloom_logo.png';
 class CreateIdentityForm extends Component {
   state = {
     address: this.props.ethAddress,
-    certificate: null,
+    message: null,
     name: '',
     signature: null,
-    modal: false
+    modal: false,
+    tweetFormVisible: false
   };
 
   toggle = this.toggle.bind(this);
@@ -30,15 +31,15 @@ class CreateIdentityForm extends Component {
   signMessage = e => {
     e.preventDefault();
     const web3 = this.props.web3;
-    const certificate = {
+    const message = {
       name: this.state.name,
       eth_address: this.state.address
     };
     this.setState({
-      certificate
+      message
     });
     web3.personal.sign(
-      web3.fromUtf8(JSON.stringify(certificate)),
+      web3.fromUtf8(JSON.stringify(message)),
       web3.eth.coinbase,
       (err, signature) => {
         this.setState({ signature });
@@ -52,11 +53,18 @@ class CreateIdentityForm extends Component {
     window.location = '/bloom';
   }
 
+  _showTweetForm = () => {
+    this.setState({tweetFormVisible: true})
+  }
+
   render() {
     const ethAddress = this.props.ethAddress;
+    const tweetFormVisible = this.state.tweetFormVisible;
+    const signature = this.state.signature;
     return (
       <div className="container">
-        {this.state.signature === null ? (
+        {!tweetFormVisible && (
+        (signature === null) ? (
           <Fragment>
             <Form className="form-container" onSubmit={this.signMessage}>
               <Label className="form-label" for="name">First and Last Name</Label>
@@ -122,16 +130,20 @@ class CreateIdentityForm extends Component {
               size="lg"
               outline
               color="info"
-              href="/tweeturl"
+              onClick={this._showTweetForm}
             >
-              I Tweeted
+              I tweeted!
             </Button>
-            <TweetForm
-              ethAddress={this.state.ethAddress}
-              signature={this.state.signature}
-              />
           </Fragment>
-        )}
+        )
+      )}
+      {tweetFormVisible &&
+        <TweetForm
+          message={this.state.message}
+          ethAddress={this.state.ethAddress}
+          signature={this.state.signature}
+          />
+      }
       </div>
     );
   }

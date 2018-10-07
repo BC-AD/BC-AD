@@ -50,15 +50,6 @@ async function getTwitterBearerToken() {
   return twitterBearerToken.data.access_token;
 }
 
-async function getTweet(url, twitterBearerToken) {
-  const tweet = await axios.get(url, {
-    headers: {
-      Authorization: `Basic ${twitterBearerToken}`
-    }
-  });
-  return JSON.parse(tweet).text;
-}
-
 /* ROUTES */
 app.post('/verifyTweet', (req, res) => {
   const url = req.body.url;
@@ -76,10 +67,6 @@ app.post('/verifyTweet', (req, res) => {
       data = data.split(' ');
       res.send(data[0]);
     });
-
-    // getTweet(base + statusId, twitterBearerToken).then(signature => {
-    //   res.send(signature);
-    // });
   });
 });
 

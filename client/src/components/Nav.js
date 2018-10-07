@@ -26,14 +26,14 @@ const Nav = () => {
       >
         Assets
       </NavLink>
-      <NavLink
+      {/*<NavLink
         to="/authenticators"
         className="navlink"
         style={{ textDecoration: 'none' }}
         activeStyle={{ textDecoration: 'none', color: 'white' }}
       >
         Authenticators
-      </NavLink>
+      </NavLink>*/}
     </div>
   );
 };

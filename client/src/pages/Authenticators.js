@@ -2,26 +2,33 @@ import React, { Component } from 'react';
 import authAbi from '../contracts/registrarNoProxy.json';
 const web3 = window.web3 && new window.Web3(window.web3.currentProvider);
 
-class Auth extends Component {
+const users = [
+  '0xCd4473A15D8C97eb25abDcEad68950ead14F0068',
+  '0x006Daa4467d7A54b9eE769E56A015C0797d9b6fC',
+  '0x3886a3a8257D724ad922bc9AD11B6356369B7843',
+  '0x84Ee47bBc4168745a0eD45dE92Fe3E5F33205b2B',
+  '0x9738411DB62B53d2fF8FB92b1Da4797e2e1ab1A0'
+];
+
+class Authenticators extends Component {
   state = {
-    authAddress: '0x335b018382cf360246692d03bfd3490bd45ea162',
+    authAddress: '0x599e30594d75a67c1899e0eaa167072e3f3ec610',
     auth: null
   };
 
   _getContract = (abi, address) => {
     const Contract = web3.eth.contract(abi);
     const ContractInstance = Contract.at(address);
-    console.log('CONTRACT', ContractInstance);
     return ContractInstance;
   };
 
   getAuth = () => {
     const AuthInstance = this._getContract(authAbi, this.state.authAddress);
     console.log(AuthInstance);
-    // const auth = AuthInstance.allIDs.call((err, data) => {
-    //   console.log(data);
-    // });
-    //console.log(Auth);
+    let userData = [];
+    for (var addr in users) {
+      console.log(AuthInstance.getUserData.getData(addr));
+    }
   };
 
   render() {
@@ -30,4 +37,4 @@ class Auth extends Component {
   }
 }
 
-export default Auth;
+export default Authenticators;

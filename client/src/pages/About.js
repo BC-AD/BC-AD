@@ -12,10 +12,15 @@ const About = () => {
         <Button
           color="primary"
           size="lg"
-          onClick={() => {window.location = '/register'}}
-          >View Demo</Button>
+          href='/register'>
+          View Demo
+        </Button>
         {'  '}
-        <Button color="secondary" size="lg">View Code on Github</Button>
+        <Button
+          color="secondary"
+          size="lg"
+          href="#">
+          View Code on Github</Button>
       </div>
     </div>
   )

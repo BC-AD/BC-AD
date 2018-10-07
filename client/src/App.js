@@ -6,7 +6,7 @@ import Bloom from './pages/Bloom';
 import Register from './pages/Register';
 import TweetForm from './components/TweetForm';
 import Nav from './components/Nav';
-import Auth from './pages/Auth';
+import Authenticators from './pages/Authenticators';
 import Assets from './pages/Assets';
 
 const App = () => {
@@ -17,7 +17,7 @@ const App = () => {
         <Route exact path="/" component={About} />
         <Route exact path="/bloom" component={Bloom} />
         <Route exact path="/register" component={Register} />
-        <Route exact path="/authenticators" component={Auth} />
+        <Route exact path="/authenticators" component={Authenticators} />
         <Route exact path="/assets" component={Assets} />
       </div>
     </Router>

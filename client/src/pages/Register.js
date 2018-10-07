@@ -29,7 +29,7 @@ class Home extends Component {
 
     console.log(web3);
     return (
-      <Fragment className="Register">
+      <Fragment>
         <div className="App-Header">
           <p className="subtitle">Register to be an asset authenticator</p>
         </div>
