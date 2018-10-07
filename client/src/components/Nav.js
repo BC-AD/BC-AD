@@ -6,8 +6,7 @@ const Nav = () => {
   return (
     <div className="nav-container">
       <div
-        id='brand'
-        className='navlink'>BC/AD</div>
+        id='brand'>BC/AD</div>
       <NavLink
         exact
         to="/register"
