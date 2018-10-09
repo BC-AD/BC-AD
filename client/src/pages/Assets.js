@@ -3,14 +3,6 @@ import assetAbi from '../contracts/asset.json';
 import './Assets.css';
 const web3 = window.web3 && new window.Web3(window.web3.currentProvider);
 
-// auth 0x9020316f378adfD6c0e7D700ca87DFdFa9F5C49b
-//
-// 0x335b018382cf360246692d03bfd3490bd45ea162
-
-// asset
-// 0x440d90178040ec558d27c23237a315c61238e9ed
-// 0x1c5D4218053dBC8B6fBc78C39EF25b21EF8Cc0eF
-
 class Assets extends Component {
   state = {
     assetAddress: '0x440d90178040ec558d27c23237a315c61238e9ed',
@@ -26,9 +18,15 @@ class Assets extends Component {
   getAssets = () => {
     const AssetInstance = this._getContract(assetAbi, this.state.assetAddress);
     AssetInstance.getAllAssets.call((err, data) => {
-      this.setState({
-        assets: data
+      let temp = [];
+      const result = data.map(d => {
+        let uid = data.indexOf(d);
+        AssetInstance.getVerifiersForAsset.call(uid, (err, data) => {
+          console.log(data);
+        });
+        return <div key={d}>{d}</div>;
       });
+      this.setState({ assets: result });
     });
   };
 
@@ -39,14 +37,8 @@ class Assets extends Component {
     }
     return (
       <div className="asset-container">
+        <h2 className="asset-title">Assets</h2>
         <div className="assets">{assets}</div>
-        {/* {assets.map(asset => {
-          return (
-            <ul className="assets">
-              <h4>{asset}</h4>
-            </ul>
-          );
-        })} */}
       </div>
     );
   }
